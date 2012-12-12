@@ -24,3 +24,5 @@ HEADERS  += \
 
 FORMS    += \
     mainwidget.ui
+
+RC_FILE = icon.rc
