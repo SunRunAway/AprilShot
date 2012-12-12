@@ -19,11 +19,13 @@ MainWidget::MainWidget(QWidget *parent) :
 
     shootFullScreen();
     updateScreenshotLabel();
+
 }
 
 MainWidget::~MainWidget()
 {
     delete ui;
+    delete ts;
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
