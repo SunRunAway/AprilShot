@@ -48,7 +48,7 @@ void MainWidget::loadSettings()
     QSettings settings("config.ini", QSettings::IniFormat);
     int delay = settings.value("DefaultOptions/delay", 2).toInt();
     int mode = settings.value("DefaultOptions/mode", 1).toInt();
-    savePath = settings.value("DefaultOptions/folder", "%USERPROFILE%/Pictures/AprilShot").toString();
+    savePath = settings.value("DefaultOptions/folder", "%HOME%").toString();
     ParsePath(savePath);
     count = settings.value("Count/num", 0).toUInt();
 
