@@ -3,8 +3,8 @@
 RectSelector::RectSelector()
 {
     setWindowState(Qt::WindowActive|Qt::WindowFullScreen);
-    infoWidth = 100; //×ø±êĞÅÏ¢¿òµÄ¿í¶È
-    infoHeight = 50; //×ø±êĞÅÏ¢¿òµÄ¸ß¶È
+    infoWidth = 100; //åæ ‡ä¿¡æ¯æ¡†çš„å®½åº¦
+    infoHeight = 50; //åæ ‡ä¿¡æ¯æ¡†çš„é«˜åº¦
     initRectSelector();
 }
 
@@ -41,7 +41,7 @@ QPixmap RectSelector::getFullScreenPixmap()
 {
     initRectSelector();
     QPixmap result = QPixmap();
-    result = QPixmap::grabWindow(QApplication::desktop()->winId()); //×¥È¡µ±Ç°ÆÁÄ»µÄÍ¼Æ¬
+    result = QPixmap::grabWindow(QApplication::desktop()->winId()); //æŠ“å–å½“å‰å±å¹•çš„å›¾ç‰‡
 
     return result;
 }
@@ -49,24 +49,24 @@ QPixmap RectSelector::getFullScreenPixmap()
 void RectSelector::paintEvent(QPaintEvent *event)
 {
     QColor shadowColor;
-    shadowColor= QColor(0,0,0,100); //ÒõÓ°ÑÕÉ«ÉèÖÃ
-    painter.begin(this); //½øĞĞÖØ»æ
+    shadowColor= QColor(0,0,0,100); //é˜´å½±é¢œè‰²è®¾ç½®
+    painter.begin(this); //è¿›è¡Œé‡ç»˜
 
-    painter.setPen(QPen(Qt::blue,2,Qt::SolidLine,Qt::FlatCap));//ÉèÖÃ»­±Ê
-    painter.drawPixmap(screenx,screeny,loadPixmap); //½«±³¾°Í¼Æ¬»­µ½´°ÌåÉÏ
-    painter.fillRect(screenx,screeny,screenwidth,screenheight,shadowColor); //»­Ó°ÕÖĞ§¹û
+    painter.setPen(QPen(Qt::blue,2,Qt::SolidLine,Qt::FlatCap));//è®¾ç½®ç”»ç¬”
+    painter.drawPixmap(screenx,screeny,loadPixmap); //å°†èƒŒæ™¯å›¾ç‰‡ç”»åˆ°çª—ä½“ä¸Š
+    painter.fillRect(screenx,screeny,screenwidth,screenheight,shadowColor); //ç”»å½±ç½©æ•ˆæœ
 
     switch(currentShotState){
     case initShot:
         break;
     case beginShot:
     case finishShot:
-        selectedRect = getRect(beginPoint,endPoint); //»ñÈ¡Ñ¡Çø
+        selectedRect = getRect(beginPoint,endPoint); //è·å–é€‰åŒº
         drawSelectedPixmap();
         break;
     case beginMoveShot:
     case finishMoveShot:
-        selectedRect = getMoveAllSelectedRect(); //»ñÈ¡Ñ¡Çø
+        selectedRect = getMoveAllSelectedRect(); //è·å–é€‰åŒº
         drawSelectedPixmap();
         break;
     case beginControl:
@@ -77,11 +77,11 @@ void RectSelector::paintEvent(QPaintEvent *event)
     default:
         break;
     }
-    drawXYWHInfo(); //´òÓ¡×ø±êĞÅÏ¢
-    painter.end();  //ÖØ»æ½áÊø
+    drawXYWHInfo(); //æ‰“å°åæ ‡ä¿¡æ¯
+    painter.end();  //é‡ç»˜ç»“æŸ
 
     if(currentShotState == finishMoveShot || currentShotState == finishControl){
-        updateBeginEndPointValue(selectedRect); //µ±ÒÆ¶¯ÍêÑ¡Çøºó£¬¸üĞÂbeginPoint,endPoint;ÎªÏÂÒ»´ÎÒÆ¶¯×ö×¼±¸¹¤×÷
+        updateBeginEndPointValue(selectedRect); //å½“ç§»åŠ¨å®Œé€‰åŒºåï¼Œæ›´æ–°beginPoint,endPoint;ä¸ºä¸‹ä¸€æ¬¡ç§»åŠ¨åšå‡†å¤‡å·¥ä½œ
     }
 
 }
@@ -96,21 +96,21 @@ void RectSelector::keyPressEvent(QKeyEvent *event)
 
 void RectSelector::mousePressEvent(QMouseEvent *event)
 {
-    //µ±¿ªÊ¼½øĞĞÍÏ¶¯½øĞĞÑ¡ÔñÇøÓòÊ±,È·¶¨¿ªÊ¼Ñ¡È¡µÄbeginPoint×ø±ê
+    //å½“å¼€å§‹è¿›è¡Œæ‹–åŠ¨è¿›è¡Œé€‰æ‹©åŒºåŸŸæ—¶,ç¡®å®šå¼€å§‹é€‰å–çš„beginPointåæ ‡
     if(event->button() == Qt::LeftButton && currentShotState == initShot){
-        currentShotState = beginShot; //ÉèÖÃµ±Ç°×´Ì¬ÎªbeginShot×´Ì¬
+        currentShotState = beginShot; //è®¾ç½®å½“å‰çŠ¶æ€ä¸ºbeginShotçŠ¶æ€
         beginPoint = event->pos();
     }
 
-    //ÒÆ¶¯Ñ¡Çø¸Ä±äÑ¡ÇøµÄËùÔÚÎ»ÖÃ
+    //ç§»åŠ¨é€‰åŒºæ”¹å˜é€‰åŒºçš„æ‰€åœ¨ä½ç½®
     if(event->button() == Qt::LeftButton && isInSelectedRect(event->pos()) &&
             getMoveControlState(event->pos()) == moveControl0){
-        currentShotState = beginMoveShot; //ÆôÓÃ¿ªÊ¼ÒÆ¶¯Ñ¡È¡Ñ¡Ïî,beginMoveShot×´Ì¬
+        currentShotState = beginMoveShot; //å¯ç”¨å¼€å§‹ç§»åŠ¨é€‰å–é€‰é¡¹,beginMoveShotçŠ¶æ€
         moveBeginPoint = event->pos();
     }
-    //ÒÆ¶¯¿ØÖÆµã¸Ä±äÑ¡Çø´óĞ¡
+    //ç§»åŠ¨æ§åˆ¶ç‚¹æ”¹å˜é€‰åŒºå¤§å°
     if(event->button() == Qt::LeftButton && getMoveControlState(event->pos()) != moveControl0){
-        currentShotState = beginControl; //¿ªÊ¼ÒÆ¶¯¿ØÖÆµã
+        currentShotState = beginControl; //å¼€å§‹ç§»åŠ¨æ§åˆ¶ç‚¹
         controlValue = getMoveControlState(event->pos());
         moveBeginPoint = event->pos();
     }
@@ -130,7 +130,7 @@ void RectSelector::mouseReleaseEvent(QMouseEvent *event)
         update();
     }
 
-    //µ±Ç°×´Ì¬ÎªbeginControl×´Ì¬Ê±£¬ÉèÖÃ×´Ì¬ÎªfinishControl
+    //å½“å‰çŠ¶æ€ä¸ºbeginControlçŠ¶æ€æ—¶ï¼Œè®¾ç½®çŠ¶æ€ä¸ºfinishControl
     if(event->button() == Qt::LeftButton && currentShotState == beginControl){
         currentShotState = finishControl;
         moveEndPoint = event->pos();
@@ -140,26 +140,26 @@ void RectSelector::mouseReleaseEvent(QMouseEvent *event)
 
 void RectSelector::mouseMoveEvent(QMouseEvent *event)
 {
-    //µ±ÍÏ¶¯Ê±£¬¶¯Ì¬µÄ¸üĞÂËùÑ¡ÔñµÄÇøÓò
+    //å½“æ‹–åŠ¨æ—¶ï¼ŒåŠ¨æ€çš„æ›´æ–°æ‰€é€‰æ‹©çš„åŒºåŸŸ
     if(currentShotState == beginShot){
         endPoint = event->pos();
         update();
     }
 
-    //µ±È·¶¨Ñ¡Çøºó£¬¶ÔÑ¡Çø½øĞĞÒÆ¶¯²Ù×÷
+    //å½“ç¡®å®šé€‰åŒºåï¼Œå¯¹é€‰åŒºè¿›è¡Œç§»åŠ¨æ“ä½œ
     if(currentShotState == beginMoveShot || currentShotState == beginControl){
         moveEndPoint = event->pos();
         update();
     }
 
-    updateMouseShape(event->pos()); //ĞŞ¸ÄÊó±êµÄĞÎ×´
+    updateMouseShape(event->pos()); //ä¿®æ”¹é¼ æ ‡çš„å½¢çŠ¶
     setMouseTracking(true);
 }
 
 void RectSelector::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(currentShotState == finishShot || currentShotState == finishMoveShot || currentShotState == finishControl){
-        emit finishPixmap(shotPixmap); //µ±Íê³ÉÊ±·¢ËÍfinishPixmapĞÅºÅ
+        emit finishPixmap(shotPixmap); //å½“å®Œæˆæ—¶å‘é€finishPixmapä¿¡å·
         hide();
     }
 }
@@ -184,14 +184,14 @@ void RectSelector::initRectSelector()
     moveBeginPoint = QPoint(0,0);
     moveEndPoint = QPoint(0,0);
 
-    tlRect = QRect(0,0,0,0); //×óÉÏµã
-    trRect = QRect(0,0,0,0); //ÉÏÓÒµã
-    blRect = QRect(0,0,0,0); //×óÏÂµã
-    brRect = QRect(0,0,0,0); //ÓÒÏÂµã
-    tcRect = QRect(0,0,0,0); //ÉÏÖĞµã
-    bcRect = QRect(0,0,0,0); //ÏÂÖĞµã
-    lcRect = QRect(0,0,0,0); //×óÖĞµã
-    rcRect = QRect(0,0,0,0); //ÓÒÖĞµã
+    tlRect = QRect(0,0,0,0); //å·¦ä¸Šç‚¹
+    trRect = QRect(0,0,0,0); //ä¸Šå³ç‚¹
+    blRect = QRect(0,0,0,0); //å·¦ä¸‹ç‚¹
+    brRect = QRect(0,0,0,0); //å³ä¸‹ç‚¹
+    tcRect = QRect(0,0,0,0); //ä¸Šä¸­ç‚¹
+    bcRect = QRect(0,0,0,0); //ä¸‹ä¸­ç‚¹
+    lcRect = QRect(0,0,0,0); //å·¦ä¸­ç‚¹
+    rcRect = QRect(0,0,0,0); //å³ä¸­ç‚¹
 
     setCursor(Qt::CrossCursor);
 }
@@ -213,7 +213,7 @@ bool RectSelector::isInSelectedRect(const QPoint &point)
 void RectSelector::cancelSelectedRect()
 {
     initRectSelector();
-    update(); //½øĞĞÖØ»æ£¬½«Ñ¡È¡ÇøÓòÈ¥µô
+    update(); //è¿›è¡Œé‡ç»˜ï¼Œå°†é€‰å–åŒºåŸŸå»æ‰
 }
 
 void RectSelector::quitSelector()
@@ -261,19 +261,19 @@ void RectSelector::checkMoveEndPoint()
     x = moveEndPoint.x() - moveBeginPoint.x();
     y = moveEndPoint.y() - moveBeginPoint.y();
 
-    if(x + selectedRect.x() < 0){ //µ±ÒÆ¶¯ºóX×ø±êĞ¡ÓÚÁãÊ±£¬Ôò³öÏÖÑ¡Çø¶ªÊ§£¬Ôò¼ÆËã³ömoveEndPointµÄX×î´ó×ø±êÖµ£¬½øĞĞ¸³Öµ
+    if(x + selectedRect.x() < 0){ //å½“ç§»åŠ¨åXåæ ‡å°äºé›¶æ—¶ï¼Œåˆ™å‡ºç°é€‰åŒºä¸¢å¤±ï¼Œåˆ™è®¡ç®—å‡ºmoveEndPointçš„Xæœ€å¤§åæ ‡å€¼ï¼Œè¿›è¡Œèµ‹å€¼
         moveEndPoint.setX(qAbs(selectedRect.x()-moveBeginPoint.x()));
     }
 
-    if(y + selectedRect.y() < 0){ //µ±ÒÆ¶¯ºóY×ø±êĞ¡ÓÚÁãÊ±£¬Ôò³öÏÖÑ¡Çø¶ªÊ§£¬Ôò¼ÆËã³ömoveEndPointµÄY×î´ó×ø±êÖµ£¬½øĞĞ¸³Öµ
+    if(y + selectedRect.y() < 0){ //å½“ç§»åŠ¨åYåæ ‡å°äºé›¶æ—¶ï¼Œåˆ™å‡ºç°é€‰åŒºä¸¢å¤±ï¼Œåˆ™è®¡ç®—å‡ºmoveEndPointçš„Yæœ€å¤§åæ ‡å€¼ï¼Œè¿›è¡Œèµ‹å€¼
         moveEndPoint.setY(qAbs(selectedRect.y() - moveBeginPoint.y()));
     }
 
-    if(x + bottomRightPoint.x() > screenwidth){ //µ±ÒÆ¶¯Ñ¡Çøºó£¬³öÏÖ³¬³öÕû¸öÆÁÄ»µÄÓÒÃæÊ±£¬ÉèÖÃmoveEndPointµÄXµÄ×î´ó×ø±ê
+    if(x + bottomRightPoint.x() > screenwidth){ //å½“ç§»åŠ¨é€‰åŒºåï¼Œå‡ºç°è¶…å‡ºæ•´ä¸ªå±å¹•çš„å³é¢æ—¶ï¼Œè®¾ç½®moveEndPointçš„Xçš„æœ€å¤§åæ ‡
         moveEndPoint.setX(screenwidth - bottomRightPoint.x() + moveBeginPoint.x());
     }
 
-    if(y + bottomRightPoint.y() > screenheight){ //µ±ÒÆ¶¯Ñ¡Çøºó£¬³öÏÖ³¬³öÕû¸öÆÁÄ»µÄÏÂÃæÊ±£¬ÉèÖÃmoveEndPointµÄYµÄ×î´ó×ø±êÖµ
+    if(y + bottomRightPoint.y() > screenheight){ //å½“ç§»åŠ¨é€‰åŒºåï¼Œå‡ºç°è¶…å‡ºæ•´ä¸ªå±å¹•çš„ä¸‹é¢æ—¶ï¼Œè®¾ç½®moveEndPointçš„Yçš„æœ€å¤§åæ ‡å€¼
         moveEndPoint.setY(screenheight - bottomRightPoint.y() + moveBeginPoint.y());
     }
 }
@@ -281,11 +281,11 @@ void RectSelector::checkMoveEndPoint()
 void RectSelector::draw8ControlPoint(const QRect &rect)
 {
     int x,y;
-    QColor color= QColor(0,0,255); //»­µãµÄÑÕÉ«ÉèÖÃ
-    QPoint tlPoint = rect.topLeft(); //×óÉÏµã
-    QPoint trPoint = rect.topRight(); //ÓÒÉÏµã
-    QPoint blPoint = rect.bottomLeft(); //×óÏÂµã
-    QPoint brPoint = rect.bottomRight(); //ÓÒÏÂµã
+    QColor color= QColor(0,0,255); //ç”»ç‚¹çš„é¢œè‰²è®¾ç½®
+    QPoint tlPoint = rect.topLeft(); //å·¦ä¸Šç‚¹
+    QPoint trPoint = rect.topRight(); //å³ä¸Šç‚¹
+    QPoint blPoint = rect.bottomLeft(); //å·¦ä¸‹ç‚¹
+    QPoint brPoint = rect.bottomRight(); //å³ä¸‹ç‚¹
 
     x = (tlPoint.x()+trPoint.x())/2;
     y = tlPoint.y();
@@ -303,14 +303,14 @@ void RectSelector::draw8ControlPoint(const QRect &rect)
     y = (trPoint.y()+brPoint.y())/2;
     QPoint rcPoint = QPoint(x,y);
 
-    tlRect = QRect(tlPoint.x()-2,tlPoint.y()-2,6,6); //×óÉÏµã
-    trRect = QRect(trPoint.x()-2,trPoint.y()-2,6,6); //ÓÒÉÏµã
-    blRect = QRect(blPoint.x()-2,blPoint.y()-2,6,6); //×óÏÂµã
-    brRect = QRect(brPoint.x()-2,brPoint.y()-2,6,6); //ÓÒÏÂµã
-    tcRect = QRect(tcPoint.x()-2,tcPoint.y()-2,6,6); //ÉÏÖĞµã
-    bcRect = QRect(bcPoint.x()-2,bcPoint.y()-2,6,6); //ÏÂÖĞµã
-    lcRect = QRect(lcPoint.x()-2,lcPoint.y()-2,6,6);//×óÖĞµã
-    rcRect = QRect(rcPoint.x()-2,rcPoint.y()-2,6,6); //ÓÒÖĞµã
+    tlRect = QRect(tlPoint.x()-2,tlPoint.y()-2,6,6); //å·¦ä¸Šç‚¹
+    trRect = QRect(trPoint.x()-2,trPoint.y()-2,6,6); //å³ä¸Šç‚¹
+    blRect = QRect(blPoint.x()-2,blPoint.y()-2,6,6); //å·¦ä¸‹ç‚¹
+    brRect = QRect(brPoint.x()-2,brPoint.y()-2,6,6); //å³ä¸‹ç‚¹
+    tcRect = QRect(tcPoint.x()-2,tcPoint.y()-2,6,6); //ä¸Šä¸­ç‚¹
+    bcRect = QRect(bcPoint.x()-2,bcPoint.y()-2,6,6); //ä¸‹ä¸­ç‚¹
+    lcRect = QRect(lcPoint.x()-2,lcPoint.y()-2,6,6);//å·¦ä¸­ç‚¹
+    rcRect = QRect(rcPoint.x()-2,rcPoint.y()-2,6,6); //å³ä¸­ç‚¹
 
     painter.fillRect(tlRect,color);
     painter.fillRect(trRect,color);
@@ -342,7 +342,7 @@ void RectSelector::updateMouseShape(const QPoint &point)
             updateMoveControlMouseShape(getMoveControlState(point));
         break;
     case beginControl:
-        updateMoveControlMouseShape(controlValue); //µ÷ÓÃº¯Êı¶ÔÒÆ¶¯8¸ö¿ØÖÆµã½øĞĞÊó±ê×´Ì¬µÄ¸Ä±ä
+        updateMoveControlMouseShape(controlValue); //è°ƒç”¨å‡½æ•°å¯¹ç§»åŠ¨8ä¸ªæ§åˆ¶ç‚¹è¿›è¡Œé¼ æ ‡çŠ¶æ€çš„æ”¹å˜
         break;
     default:
         setCursor(Qt::ArrowCursor);
@@ -416,7 +416,7 @@ QRect RectSelector::getMoveAllSelectedRect(void)
     QRect result;
     QPoint tmpBeginPoint,tmpEndPoint;
     int moveX,moveY;
-    checkMoveEndPoint(); //¶ÔÒÆ¶¯Ñ¡Çø½øĞĞÅĞ¶Ï£¬µ±ÒÆ¶¯µÄÑ¡Çø³¬³ö±ß½ç£¬ÔòÍ£Ö¹ÒÆ¶¯
+    checkMoveEndPoint(); //å¯¹ç§»åŠ¨é€‰åŒºè¿›è¡Œåˆ¤æ–­ï¼Œå½“ç§»åŠ¨çš„é€‰åŒºè¶…å‡ºè¾¹ç•Œï¼Œåˆ™åœæ­¢ç§»åŠ¨
     moveX = moveEndPoint.x() - moveBeginPoint.x();
     moveY = moveEndPoint.y() - moveBeginPoint.y();
     tmpBeginPoint.setX(beginPoint.x() + moveX);
@@ -480,7 +480,7 @@ QRect RectSelector::getMoveControlSelectedRect(void)
         break;
     }
 
-    return QRect(x,y,w,h); //»ñÈ¡Ñ¡Çø
+    return QRect(x,y,w,h); //è·å–é€‰åŒº
 }
 
 int RectSelector::getMinValue(int num1, int num2)
@@ -490,12 +490,12 @@ int RectSelector::getMinValue(int num1, int num2)
 
 void RectSelector::drawSelectedPixmap(void)
 {
-    painter.drawRect(selectedRect); //»­Ñ¡ÖĞµÄ¾ØĞÎ¿ò
-    shotPixmap = loadPixmap.copy(selectedRect);  //¸üĞÂÑ¡ÇøµÄPixmap
+    painter.drawRect(selectedRect); //ç”»é€‰ä¸­çš„çŸ©å½¢æ¡†
+    shotPixmap = loadPixmap.copy(selectedRect);  //æ›´æ–°é€‰åŒºçš„Pixmap
     if(selectedRect.width() > 0 && selectedRect.height()){
-        painter.drawPixmap(selectedRect.topLeft(),shotPixmap); //»­Ñ¡ÖĞÇøÓòµÄÍ¼Æ¬
+        painter.drawPixmap(selectedRect.topLeft(),shotPixmap); //ç”»é€‰ä¸­åŒºåŸŸçš„å›¾ç‰‡
     }
-    draw8ControlPoint(selectedRect); //»­³öÑ¡ÇøµÄ8¸ö¿ØÖÆµã
+    draw8ControlPoint(selectedRect); //ç”»å‡ºé€‰åŒºçš„8ä¸ªæ§åˆ¶ç‚¹
 }
 
 void RectSelector::drawXYWHInfo(void)
@@ -517,7 +517,7 @@ void RectSelector::drawXYWHInfo(void)
         strTipsText = QString(tr(" x:%1 y:%2\n w:%3 h:%4")).arg(selectedRect.x(),4).arg(selectedRect.y(),4)
                 .arg(selectedRect.width(),4).arg(selectedRect.height(),4);
         painter.fillRect(rect,color);
-        painter.setPen(QPen(Qt::black));//ÉèÖÃ»­±ÊµÄÑÕÉ«ÎªºÚÉ«
+        painter.setPen(QPen(Qt::black));//è®¾ç½®ç”»ç¬”çš„é¢œè‰²ä¸ºé»‘è‰²
         painter.drawText(rect,Qt::AlignLeft|Qt::AlignVCenter,strTipsText);
         break;
     default:

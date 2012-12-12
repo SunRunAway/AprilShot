@@ -21,7 +21,7 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 signals:
-    void setPixmap(QPixmap pixmap); //…Ë÷√pixmap–≈œ¢
+    void setPixmap(QPixmap pixmap); //ËÆæÁΩÆpixmap‰ø°ÊÅØ
 
 private slots:
     void on_shotButton_clicked();

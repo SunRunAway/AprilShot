@@ -121,7 +121,7 @@ void MainWidget::shootTriangleScreen()
     QPixmap bgPixmap = ts->getFullScreenPixmap();
     ts->show();
 
-    emit setPixmap(bgPixmap); //·¢ËÍĞÅºÅ£¬Ê¹ÓÃµ±Ç°µÄÆÁÄ»µÄÍ¼Æ¬×÷±³¾°Í¼Æ¬
+    emit setPixmap(bgPixmap); //å‘é€ä¿¡å·ï¼Œä½¿ç”¨å½“å‰çš„å±å¹•çš„å›¾ç‰‡ä½œèƒŒæ™¯å›¾ç‰‡
 }
 
 void MainWidget::updateScreenshotLabel()

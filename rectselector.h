@@ -14,66 +14,66 @@ class RectSelector : public QWidget{
 
 public:
     RectSelector();
-    enum shotState{initShot,beginShot,finishShot,endShot,beginMoveShot,finishMoveShot,beginControl,finishControl}; //½øĞĞ½ØÆÁµÄ×´Ì¬
-    //ÒÆ¶¯Ñ¡ÇøÖĞµÄ8¸ö¿ØÖÆµã£¬°´ÕÕË³Ê±Õë·½Ïò´Ó×óÉÏ¿ØÖÆµãµ½×óÖĞ¿ØÖÆµã·ÖÅä±àºÅÎª1¡«8
+    enum shotState{initShot,beginShot,finishShot,endShot,beginMoveShot,finishMoveShot,beginControl,finishControl}; //è¿›è¡Œæˆªå±çš„çŠ¶æ€
+    //ç§»åŠ¨é€‰åŒºä¸­çš„8ä¸ªæ§åˆ¶ç‚¹ï¼ŒæŒ‰ç…§é¡ºæ—¶é’ˆæ–¹å‘ä»å·¦ä¸Šæ§åˆ¶ç‚¹åˆ°å·¦ä¸­æ§åˆ¶ç‚¹åˆ†é…ç¼–å·ä¸º1ï½8
     enum controlPointEnum{moveControl0,moveControl1,moveControl2,moveControl3,moveControl4,moveControl5,moveControl6,moveControl7,moveControl8};
-    QPixmap getFullScreenPixmap(); //»ñÈ¡È«ÆÁµÄPixmap
+    QPixmap getFullScreenPixmap(); //è·å–å…¨å±çš„Pixmap
 
 public slots:
-    void loadBackgroundPixmap(const QPixmap &bgPixmap);//¼ÓÔØ±³¾°Pixmap²Ûº¯Êı
-    void loadBackgroundPixmap(const QPixmap &bgPixmap, int x, int y, int width, int height); //¼ÓÔØ±³¾°pixmap²Ûº¯Êı£¬ÉèÖÃx,y,width,height
-    void cancelSelectedRect(); //È¡ÏûÑ¡ÔñÇøÓò
+    void loadBackgroundPixmap(const QPixmap &bgPixmap);//åŠ è½½èƒŒæ™¯Pixmapæ§½å‡½æ•°
+    void loadBackgroundPixmap(const QPixmap &bgPixmap, int x, int y, int width, int height); //åŠ è½½èƒŒæ™¯pixmapæ§½å‡½æ•°ï¼Œè®¾ç½®x,y,width,height
+    void cancelSelectedRect(); //å–æ¶ˆé€‰æ‹©åŒºåŸŸ
     void quitSelector();
 
 signals:
-    void finishPixmap(const QPixmap &finishPixmap); //Íê³ÉÇĞÍ¼ºóµÄÍ¼Æ¬,·¢ËÍĞÅºÅ¸øÁ¬½ÓÕß
+    void finishPixmap(const QPixmap &finishPixmap); //å®Œæˆåˆ‡å›¾åçš„å›¾ç‰‡,å‘é€ä¿¡å·ç»™è¿æ¥è€…
     void quitPixmap();
 
 private:
-    //Ñ¡Çø¿òµÄ8¸öµãÑ¡È¡
-    QRect tlRect; //×óÉÏµã
-    QRect trRect; //ÓÒÉÏµã
-    QRect blRect; //×óÏÂµã
-    QRect brRect; //ÓÒÏÂµã
-    QRect tcRect; //ÉÏÖĞµã
-    QRect bcRect; //ÏÂÖĞµã
-    QRect lcRect;//×óÖĞµã
-    QRect rcRect; //ÓÒÖĞµã
+    //é€‰åŒºæ¡†çš„8ä¸ªç‚¹é€‰å–
+    QRect tlRect; //å·¦ä¸Šç‚¹
+    QRect trRect; //å³ä¸Šç‚¹
+    QRect blRect; //å·¦ä¸‹ç‚¹
+    QRect brRect; //å³ä¸‹ç‚¹
+    QRect tcRect; //ä¸Šä¸­ç‚¹
+    QRect bcRect; //ä¸‹ä¸­ç‚¹
+    QRect lcRect;//å·¦ä¸­ç‚¹
+    QRect rcRect; //å³ä¸­ç‚¹
 
     QPainter painter;
     QPoint beginPoint,endPoint,moveBeginPoint,moveEndPoint;
-    QRect selectedRect; //Ñ¡ÔñÇøÓò
+    QRect selectedRect; //é€‰æ‹©åŒºåŸŸ
     QPixmap loadPixmap,shotPixmap;
-    shotState currentShotState; //µ±Ç°µÄ½ØÆÁ×´Ì¬
-    controlPointEnum controlValue; //¼ÇÂ¼ÒÆ¶¯¿ØÖÆµãµÄÖµ
-    QAction *savePixmapAction; //±£´æÍ¼Æ¬ĞĞÎª
-    QAction *cancelAction; //È¡ÏûÑ¡È¡ĞĞÎª
-    QAction *quitAction; //ÍË³öÑ¡È¡ĞĞÎª
-    QMenu *contextMenu; //Ñ¡ÖĞÇøÓòÓÒ¼ü²Ëµ¥
-    int screenwidth; //Õû¸öÆÁÄ»µÄ¿í¶È
-    int screenheight; //Õû¸öÆÁÄ»µÄ¸ß¶È
-    int screenx; //Ñ¡ÇøµÄX
-    int screeny; //Ñ¡ÇøµÄY
-    int infoWidth,infoHeight; //ÏÔÊ¾×ø±êĞÅÏ¢µÄ¿í¶È£¬¸ß¶È
+    shotState currentShotState; //å½“å‰çš„æˆªå±çŠ¶æ€
+    controlPointEnum controlValue; //è®°å½•ç§»åŠ¨æ§åˆ¶ç‚¹çš„å€¼
+    QAction *savePixmapAction; //ä¿å­˜å›¾ç‰‡è¡Œä¸º
+    QAction *cancelAction; //å–æ¶ˆé€‰å–è¡Œä¸º
+    QAction *quitAction; //é€€å‡ºé€‰å–è¡Œä¸º
+    QMenu *contextMenu; //é€‰ä¸­åŒºåŸŸå³é”®èœå•
+    int screenwidth; //æ•´ä¸ªå±å¹•çš„å®½åº¦
+    int screenheight; //æ•´ä¸ªå±å¹•çš„é«˜åº¦
+    int screenx; //é€‰åŒºçš„X
+    int screeny; //é€‰åŒºçš„Y
+    int infoWidth,infoHeight; //æ˜¾ç¤ºåæ ‡ä¿¡æ¯çš„å®½åº¦ï¼Œé«˜åº¦
 
-    QRect getSelectedRect(); //»ñÈ¡Ñ¡È¡
-    QRect getRect(const QPoint &beginPoint, const QPoint &endPoint); //¸ù¾İÁ½¸öµã»ñÈ¡Ñ¡È¡×ø±ê
-    void initRectSelector(); //³õÊ¼»¯×¥È«ÆÁµÄÏà¹Ø²ÎÊı
-    bool isInSelectedRect(const QPoint &point); //ÅĞ¶Ï¸ÃµãÊÇ·ñÔÚÑ¡ÖĞÇøÓò
-    void initSelectedMenu();//³õÊ¼»¯ÓÒ¼ü²Ëµ¥
-    void drawSelectedPixmap(void); //ÔÚÆÁÄ»ÉÏ»­Ñ¡È¡µÄÆÁÄ»
-    void updateBeginEndPointValue(const QRect &rect);  //µ±ÒÆ¶¯Ñ¡È¡ºó£¬¶ÔbeginPoint,endPoint×ø±ê½øĞĞÖØĞÂĞŞ¸Ä
-    void checkMoveEndPoint(); //¶ÔÒÆ¶¯µÄÑ¡Çø½øĞĞÅĞ¶Ï
+    QRect getSelectedRect(); //è·å–é€‰å–
+    QRect getRect(const QPoint &beginPoint, const QPoint &endPoint); //æ ¹æ®ä¸¤ä¸ªç‚¹è·å–é€‰å–åæ ‡
+    void initRectSelector(); //åˆå§‹åŒ–æŠ“å…¨å±çš„ç›¸å…³å‚æ•°
+    bool isInSelectedRect(const QPoint &point); //åˆ¤æ–­è¯¥ç‚¹æ˜¯å¦åœ¨é€‰ä¸­åŒºåŸŸ
+    void initSelectedMenu();//åˆå§‹åŒ–å³é”®èœå•
+    void drawSelectedPixmap(void); //åœ¨å±å¹•ä¸Šç”»é€‰å–çš„å±å¹•
+    void updateBeginEndPointValue(const QRect &rect);  //å½“ç§»åŠ¨é€‰å–åï¼Œå¯¹beginPoint,endPointåæ ‡è¿›è¡Œé‡æ–°ä¿®æ”¹
+    void checkMoveEndPoint(); //å¯¹ç§»åŠ¨çš„é€‰åŒºè¿›è¡Œåˆ¤æ–­
     void draw8ControlPoint(const QRect &rect);
-    void updateMouseShape(const QPoint &point); //¸üĞÂÊó±êµÄµ±Ç°×´Ì¬
+    void updateMouseShape(const QPoint &point); //æ›´æ–°é¼ æ ‡çš„å½“å‰çŠ¶æ€
     void updateMoveControlMouseShape(controlPointEnum controlValue);
-    controlPointEnum getMoveControlState(const QPoint &point); //»ñÈ¡ÒÆ¶¯¿ØÖÆµã×´Ì¬
-    QRect getMoveAllSelectedRect(void); //»ñÈ¡ÒÆ¶¯Õû¸öÑ¡ÖĞµÄÑ¡Çø
-    QRect getMoveControlSelectedRect(void);//»ñÈ¡ÒÆ¶¯¿ØÖÆµãµÄÑ¡Çø
-    int getMinValue(int num1, int num2);//»ñÈ¡Á½¸öÊıÖĞµÄ×îĞ¡Öµ
-    void drawXYWHInfo(void); //´òÓ¡Ñ¡È¡µÄx,y,h,wÖµĞÅÏ¢
+    controlPointEnum getMoveControlState(const QPoint &point); //è·å–ç§»åŠ¨æ§åˆ¶ç‚¹çŠ¶æ€
+    QRect getMoveAllSelectedRect(void); //è·å–ç§»åŠ¨æ•´ä¸ªé€‰ä¸­çš„é€‰åŒº
+    QRect getMoveControlSelectedRect(void);//è·å–ç§»åŠ¨æ§åˆ¶ç‚¹çš„é€‰åŒº
+    int getMinValue(int num1, int num2);//è·å–ä¸¤ä¸ªæ•°ä¸­çš„æœ€å°å€¼
+    void drawXYWHInfo(void); //æ‰“å°é€‰å–çš„x,y,h,wå€¼ä¿¡æ¯
 
-    //ÖØĞ´»ùÀà·½·¨
+    //é‡å†™åŸºç±»æ–¹æ³•
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
