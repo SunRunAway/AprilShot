@@ -15,14 +15,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
     mainwidget.cpp \
     utils.cpp \
-    rectselector.cpp
+    rectselector.cpp \
+    modebox.cpp
 
 HEADERS  += \
     mainwidget.h \
     utils.h \
-    rectselector.h
+    rectselector.h \
+    modebox.h
 
 FORMS    += \
     mainwidget.ui
 
 RC_FILE = icon.rc
+
+OTHER_FILES += \
+    icon.rc \
+    AprilShot.ico
+
+RESOURCES += \
+    icon.qrc

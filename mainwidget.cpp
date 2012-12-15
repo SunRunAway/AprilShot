@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QClipboard>
+#include <QVector>
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "rectselector.h"
@@ -7,19 +8,24 @@
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::MainWidget)
+    ui(new Ui::MainWidget),
+    ts(new RectSelector)
 {
     ui->setupUi(this);
+
+    QVector<QPushButton*> modeButtons;
+    modeButtons.push_back(ui->mode0Button);
+    modeButtons.push_back(ui->mode1Button);
+    modeBox = new ModeBox(modeButtons);
+
     loadSettings();
 
-    ts = new RectSelector();
     connect(this, SIGNAL(setPixmap(QPixmap)), ts, SLOT(loadBackgroundPixmap(QPixmap)));
     connect(ts, SIGNAL(finishPixmap(QPixmap)), this, SLOT(triangleReceiver(QPixmap)));
     connect(ts, SIGNAL(quitPixmap()), this, SLOT(triangleReceiver()));
 
     shootFullScreen();
     updateScreenshotLabel();
-
 }
 
 MainWidget::~MainWidget()
@@ -48,7 +54,7 @@ void MainWidget::loadSettings()
     QSettings settings("config.ini", QSettings::IniFormat);
     int delay = settings.value("DefaultOptions/delay", 2).toInt();
     int mode = settings.value("DefaultOptions/mode", 1).toInt();
-    savePath = settings.value("DefaultOptions/folder", "%HOME%").toString();
+    savePath = settings.value("DefaultOptions/folder", "%HOME%/Pictures/AprilShot").toString();
     ParsePath(savePath);
     count = settings.value("Count/num", 0).toUInt();
 
@@ -58,7 +64,7 @@ void MainWidget::loadSettings()
     if (!(mode <= 1 && mode >= 0))
         mode = 1;
     ui->delayBox->setValue(delay);
-    ui->modeBox->setCurrentIndex(mode);
+    modeBox->setCurrentIndex(mode);
 }
 
 void MainWidget::saveSettings()
@@ -66,7 +72,7 @@ void MainWidget::saveSettings()
     QSettings settings("config.ini", QSettings::IniFormat);
     settings.beginGroup("DefaultOptions");
         settings.setValue("delay", ui->delayBox->value());
-        settings.setValue("mode", ui->modeBox->currentIndex());
+        settings.setValue("mode", modeBox->currentIndex());
     settings.endGroup();
     settings.beginGroup("Count");
         settings.setValue("num", count);
@@ -93,7 +99,7 @@ void MainWidget::on_shotButton_clicked()
 
 void MainWidget::shootScreen()
 {
-    int mode = ui->modeBox->currentIndex();
+    int mode = modeBox->currentIndex();
     if (ui->delayBox->value() != 0)
         qApp->beep();
 
@@ -174,4 +180,14 @@ void MainWidget::on_saveButton_clicked()
         if (ok)
             count++;
     }
+}
+
+void MainWidget::on_mode0Button_clicked()
+{
+    modeBox->setCurrentIndex(0);
+}
+
+void MainWidget::on_mode1Button_clicked()
+{
+    modeBox->setCurrentIndex(1);
 }

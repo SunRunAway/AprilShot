@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "rectselector.h"
+#include "modebox.h"
 
 namespace Ui {
 class MainWidget;
@@ -37,9 +38,14 @@ private slots:
     void triangleReceiver();
     void triangleReceiver(QPixmap);
 
+    void on_mode0Button_clicked();
+
+    void on_mode1Button_clicked();
+
 private:
     Ui::MainWidget *ui;
     RectSelector *ts;
+    ModeBox *modeBox;
     QPixmap originalPixmap;
     QString savePath;
     unsigned int count;

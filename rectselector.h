@@ -8,7 +8,8 @@
 #include <QPainter>
 #include <QBrush>
 
-class RectSelector : public QWidget{
+class RectSelector : public QWidget
+{
 
     Q_OBJECT
 
