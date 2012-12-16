@@ -138,24 +138,18 @@
       <enum>QLayout::SetMaximumSize</enum>
      </property>
      <item>
-      <widget class="QPushButton" name="saveButton">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
+      <widget class="QPushButton" name="shotButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
-         <verstretch>200</verstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Save</string>
+        <string>Shot</string>
        </property>
        <property name="shortcut">
-        <string>Ctrl+S</string>
-       </property>
-       <property name="autoRepeatDelay">
-        <number>300</number>
+        <string>Ctrl+T</string>
        </property>
       </widget>
      </item>
@@ -176,18 +170,24 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="shotButton">
+      <widget class="QPushButton" name="saveButton">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
+         <verstretch>200</verstretch>
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Shot</string>
+        <string>Save</string>
        </property>
        <property name="shortcut">
-        <string>Ctrl+T</string>
+        <string>Ctrl+S</string>
+       </property>
+       <property name="autoRepeatDelay">
+        <number>300</number>
        </property>
       </widget>
      </item>
