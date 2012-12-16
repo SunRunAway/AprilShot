@@ -1,3 +1,9 @@
 <RCC>
-    <qresource prefix="/icons"/>
+    <qresource prefix="/icons">
+        <file>images/保存.png</file>
+        <file>images/复制.png</file>
+        <file>images/截图.png</file>
+        <file>images/矩形.png</file>
+        <file>images/全屏.png</file>
+    </qresource>
 </RCC>
