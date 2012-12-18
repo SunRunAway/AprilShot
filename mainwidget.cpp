@@ -211,11 +211,10 @@ void MainWidget::storePositionInfo(const QRect &position) {
 }
 
 void MainWidget::normal(const QPoint &topLeft, const QSize &size) {
-    this->resize(size);
-    this->move(topLeft);
+    this->setGeometry(QRect(topLeft, size));
+
     maximizedState = false;
 
-    this->hide();
     this->setWindowFlags(Qt::CustomizeWindowHint);
     this->show();
 }
@@ -224,9 +223,6 @@ void MainWidget::showNormal() {
     qDebug() << "showNormal";
 
     normal(posInfo.topLeft(), posInfo.size());
-    /*this->resize(posInfo.size());
-    this->move(posInfo.topLeft());
-    maximizedState = false;*/
 }
 
 void MainWidget::showNormalThroughDrag(const QPoint &mouse) {
@@ -239,16 +235,15 @@ void MainWidget::showNormalThroughDrag(const QPoint &mouse) {
     }
     QPoint p = QPoint(new_x, 0);
     normal(p, posInfo.size());
-
 }
 
 void MainWidget::maximized() {
     QSize s = QApplication::desktop()->availableGeometry().size();
-    this->hide();
+
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->show();
-    this->resize(s.width(), s.height());
-    this->move(0, 0);
+
+    this->setGeometry(0, 0, s.width(), s.height());
 
     maximizedState = true;
 }
