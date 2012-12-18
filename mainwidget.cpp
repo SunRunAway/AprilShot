@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QClipboard>
 #include <QVector>
+#include <QPoint>
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "rectselector.h"
@@ -9,7 +10,8 @@
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget),
-    ts(new RectSelector)
+    ts(new RectSelector),
+    maximizedState(false)
 {
     ui->setupUi(this);
 
@@ -19,6 +21,7 @@ MainWidget::MainWidget(QWidget *parent) :
     modeBox = new ModeBox(modeButtons);
 
     loadSettings();
+    //storePositionInfo();
 
     connect(this, SIGNAL(setPixmap(QPixmap)), ts, SLOT(loadBackgroundPixmap(QPixmap)));
     connect(ts, SIGNAL(finishPixmap(QPixmap)), this, SLOT(triangleReceiver(QPixmap)));
@@ -160,7 +163,7 @@ void MainWidget::on_saveButton_clicked()
     }
 
     QString initialPath;
-    for (;;)
+    while (true)
     {
         initialPath = folder + ("/screenshot_"+ QString::number(count, 10) +".") + format;
         QFile tmpf(initialPath);
@@ -190,4 +193,97 @@ void MainWidget::on_mode0Button_clicked()
 void MainWidget::on_mode1Button_clicked()
 {
     modeBox->setCurrentIndex(1);
+}
+
+void MainWidget::on_shutButton_clicked()
+{
+    close();
+}
+
+void MainWidget::storePositionInfo(const QRect &position) {
+    qDebug() << showMaximizedState();
+    if (showMaximizedState()){
+        return;
+    }
+    qDebug() << "storePositionInfo" << position;
+
+    posInfo = position;
+}
+
+void MainWidget::normal(const QPoint &topLeft, const QSize &size) {
+    this->resize(size);
+    this->move(topLeft);
+    maximizedState = false;
+
+    this->hide();
+    this->setWindowFlags(Qt::CustomizeWindowHint);
+    this->show();
+}
+
+void MainWidget::showNormal() {
+    qDebug() << "showNormal";
+
+    normal(posInfo.topLeft(), posInfo.size());
+    /*this->resize(posInfo.size());
+    this->move(posInfo.topLeft());
+    maximizedState = false;*/
+}
+
+void MainWidget::showNormalThroughDrag(const QPoint &mouse) {
+    qDebug() << "showNormalThroughDrag";
+
+    int maxWidth = QApplication::desktop()->availableGeometry().size().width();
+    int new_x = mouse.x() - int(double(mouse.x()) / maxWidth * posInfo.size().width());
+    if (new_x < 0) {
+        new_x = 0;
+    }
+    QPoint p = QPoint(new_x, 0);
+    normal(p, posInfo.size());
+
+}
+
+void MainWidget::maximized() {
+    QSize s = QApplication::desktop()->availableGeometry().size();
+    this->hide();
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->show();
+    this->resize(s.width(), s.height());
+    this->move(0, 0);
+
+    maximizedState = true;
+}
+
+void MainWidget::showMaximized() {
+    storePositionInfo(this->geometry());
+    qDebug() << "showMaximized";
+
+    maximized();
+}
+
+
+void MainWidget::showMaximizedThroughDrag(const QRect &beginPosition) {
+    storePositionInfo(beginPosition);
+    qDebug() << "showMaximizedThroughDrag";
+
+    maximized();
+}
+
+
+bool MainWidget::showMaximizedState() {
+    return maximizedState;
+}
+
+void MainWidget::on_maximizeButton_clicked()
+{
+    qDebug() << "on_maximizeButton_clicked";
+    if (maximizedState) {
+        showNormal();
+    } else {
+        showMaximized();
+    }
+}
+
+void MainWidget::on_minimizeButton_clicked()
+{
+    showMinimized();
 }

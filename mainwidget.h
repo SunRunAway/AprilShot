@@ -17,6 +17,16 @@ public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
 
+    void maximized();
+    void showMaximized();
+    void showMaximizedThroughDrag(const QRect &beginPosition);
+
+    void normal(const QPoint &topLeft, const QSize &size);
+    void showNormal();
+    void showNormalThroughDrag(const QPoint &mouse);
+    bool showMaximizedState();
+    void storePositionInfo(const QRect &position);
+
 protected:
     void resizeEvent(QResizeEvent *);
     void closeEvent(QCloseEvent *event);
@@ -42,6 +52,12 @@ private slots:
 
     void on_mode1Button_clicked();
 
+    void on_shutButton_clicked();
+
+    void on_minimizeButton_clicked();
+
+    void on_maximizeButton_clicked();
+
 private:
     Ui::MainWidget *ui;
     RectSelector *ts;
@@ -55,6 +71,8 @@ private:
     void loadSettings();
     void saveSettings();
 
+    bool maximizedState;
+    QRect posInfo;
 };
 
 #endif // MAINWIDGET_H

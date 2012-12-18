@@ -5,5 +5,9 @@
         <file>images/截图.png</file>
         <file>images/矩形.png</file>
         <file>images/全屏.png</file>
+        <file>images/矩形_gray.png</file>
+        <file>images/全屏_gray.png</file>
+        <file>images/Aprilshot_santa.png</file>
+        <file>images/Aprilshot.png</file>
     </qresource>
 </RCC>

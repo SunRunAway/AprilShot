@@ -160,7 +160,7 @@ void RectSelector::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(currentShotState == finishShot || currentShotState == finishMoveShot || currentShotState == finishControl){
         emit finishPixmap(shotPixmap); //当完成时发送finishPixmap信号
-        hide();
+        close();
     }
 }
 
@@ -219,7 +219,7 @@ void RectSelector::cancelSelectedRect()
 void RectSelector::quitSelector()
 {
     emit quitPixmap();
-    hide();
+    close();
 }
 
 void RectSelector::contextMenuEvent(QContextMenuEvent *event)

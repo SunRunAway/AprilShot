@@ -16,16 +16,19 @@ SOURCES += main.cpp\
     mainwidget.cpp \
     utils.cpp \
     rectselector.cpp \
-    modebox.cpp
+    modebox.cpp \
+    titlebar.cpp
 
 HEADERS  += \
     mainwidget.h \
     utils.h \
     rectselector.h \
-    modebox.h
+    modebox.h \
+    titlebar.h
 
 FORMS    += \
-    mainwidget.ui
+    mainwidget.ui \
+    titlebar.ui
 
 RC_FILE = icon.rc
 

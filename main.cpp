@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QApplication a(argc, argv);
     MainWidget w;
+    w.setWindowFlags(Qt::CustomizeWindowHint);
+    //w.setWindowFlags(Qt::FramelessWindowHint);
     w.show();
     
     return a.exec();
