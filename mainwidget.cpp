@@ -2,10 +2,12 @@
 #include <QClipboard>
 #include <QVector>
 #include <QPoint>
+#include <QFile>
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "rectselector.h"
 #include "utils.h"
+#include "qiniu.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -20,12 +22,18 @@ MainWidget::MainWidget(QWidget *parent) :
     modeButtons.push_back(ui->mode1Button);
     modeBox = new ModeBox(modeButtons);
 
+    createActions();
+    createTrayIcon();
+    windowVisibility = true;
+
     loadSettings();
     //storePositionInfo();
 
     connect(this, SIGNAL(setPixmap(QPixmap)), ts, SLOT(loadBackgroundPixmap(QPixmap)));
     connect(ts, SIGNAL(finishPixmap(QPixmap)), this, SLOT(triangleReceiver(QPixmap)));
     connect(ts, SIGNAL(quitPixmap()), this, SLOT(triangleReceiver()));
+    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     shootFullScreen();
     updateScreenshotLabel();
@@ -140,12 +148,14 @@ void MainWidget::updateScreenshotLabel()
     ui->imageLabel->setPixmap(originalPixmap.scaled(ui->imageLabel->size(),
                                                      Qt::KeepAspectRatio,
                                                      Qt::SmoothTransformation));
+    copyImage();
 }
 
-void MainWidget::on_copyButton_clicked()
+void MainWidget::copyImage()
 {
     QClipboard *cb = QApplication::clipboard();
     cb->setPixmap(originalPixmap);
+    qDebug() << "copied.";
 }
 
 void MainWidget::on_saveButton_clicked()
@@ -197,7 +207,7 @@ void MainWidget::on_mode1Button_clicked()
 
 void MainWidget::on_shutButton_clicked()
 {
-    close();
+    qApp->quit();
 }
 
 void MainWidget::storePositionInfo(const QRect &position) {
@@ -216,6 +226,7 @@ void MainWidget::normal(const QPoint &topLeft, const QSize &size) {
     maximizedState = false;
 
     this->setWindowFlags(Qt::CustomizeWindowHint);
+    this->ui->maximizeButton->setIcon(QIcon(":/tb/images/normal.png"));
     this->show();
 }
 
@@ -241,6 +252,7 @@ void MainWidget::maximized() {
     QSize s = QApplication::desktop()->availableGeometry().size();
 
     this->setWindowFlags(Qt::FramelessWindowHint);
+    this->ui->maximizeButton->setIcon(QIcon(":/tb/images/max.png"));
     this->show();
 
     this->setGeometry(0, 0, s.width(), s.height());
@@ -281,4 +293,71 @@ void MainWidget::on_maximizeButton_clicked()
 void MainWidget::on_minimizeButton_clicked()
 {
     showMinimized();
+}
+
+void MainWidget::on_uploadButton_clicked()
+{
+    QString format = "png";
+    QString fileName = QDate::currentDate().toString("yyMMdd") + GenerateRandomString(4) + "." + format;
+    bool ok = originalPixmap.save(fileName, format.toAscii());
+    if (ok) {
+        qDebug() << fileName;
+        qiniuup(fileName);
+        QFile::remove(fileName);
+
+        QString url = "http://aprilshot.qiniudn.com/" +  fileName;
+        QClipboard *cb = QApplication::clipboard();
+        cb->setText(url);
+        trayIcon->showMessage("The image URL has copied to your clipboard.", url,
+                              QSystemTrayIcon::NoIcon,
+                              5 * 1000);
+
+    }
+}
+
+void MainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason) {
+    case QSystemTrayIcon::Trigger:
+        if (windowVisibility) {
+            hide();
+            windowVisibility = false;
+        } else {
+            show();
+            windowVisibility = true;
+        }
+    default:
+        ;
+    }
+}
+
+void MainWidget::createActions()
+{
+    shotAction = new QAction(tr("Sho&t"), this);
+    connect(shotAction, SIGNAL(triggered()), this, SLOT(on_shotButton_clicked()));
+
+    saveAction = new QAction(tr("&Save"), this);
+    connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveButton_clicked()));
+
+    uploadAction = new QAction(tr("&Get &Link"), this);
+    connect(uploadAction, SIGNAL(triggered()), this, SLOT(on_uploadButton_clicked()));
+
+    quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+}
+
+void MainWidget::createTrayIcon()
+{
+    trayIconMenu = new QMenu(this);
+    trayIconMenu->addAction(shotAction);
+    trayIconMenu->addAction(saveAction);
+    trayIconMenu->addAction(uploadAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(quitAction);
+
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->setIcon(QIcon(":/systray/images/AprilShot_santa.ico"));
+    trayIcon->setToolTip("AprilShot");
+    trayIcon->show();
 }

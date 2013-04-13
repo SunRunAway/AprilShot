@@ -3,5 +3,6 @@
 #include <QString>
 
 void ParsePath(QString &path);
+QString GenerateRandomString(const int len);
 
 #endif // UTILS_H

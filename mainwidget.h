@@ -2,6 +2,8 @@
 #define MAINWIDGET_H
 
 #include <QWidget>
+#include <QMenu>
+#include <QSystemTrayIcon>
 #include "rectselector.h"
 #include "modebox.h"
 
@@ -27,6 +29,8 @@ public:
     bool showMaximizedState();
     void storePositionInfo(const QRect &position);
 
+    void copyImage();
+
 protected:
     void resizeEvent(QResizeEvent *);
     void closeEvent(QCloseEvent *event);
@@ -36,10 +40,8 @@ signals:
 
 private slots:
     void on_shotButton_clicked();
-
-    void on_copyButton_clicked();
-
     void on_saveButton_clicked();
+    void on_uploadButton_clicked();
 
     void shootScreen();
 
@@ -58,7 +60,12 @@ private slots:
 
     void on_maximizeButton_clicked();
 
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
 private:
+    void createActions();
+    void createTrayIcon();
+
     Ui::MainWidget *ui;
     RectSelector *ts;
     ModeBox *modeBox;
@@ -73,6 +80,14 @@ private:
 
     bool maximizedState;
     QRect posInfo;
+    QSystemTrayIcon *trayIcon;
+    QMenu *trayIconMenu;
+    bool windowVisibility;
+
+    QAction *shotAction;
+    QAction *saveAction;
+    QAction *uploadAction;
+    QAction *quitAction;
 };
 
 #endif // MAINWIDGET_H

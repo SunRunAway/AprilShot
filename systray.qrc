@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/systray">
+        <file>images/AprilShot.ico</file>
+        <file>images/AprilShot_santa.ico</file>
+    </qresource>
+</RCC>

@@ -28,3 +28,12 @@ void ParsePath(QString &path)
     }
     path = ret;
 }
+
+QString GenerateRandomString(const int len) {
+    QString s = "";
+    for (int i=0; i<len; i++)
+        s += rand() % 26 + 'a';
+    for (int i=0; i<len; i++)
+        s += rand() % 10 + '0';
+    return QString(s);
+}

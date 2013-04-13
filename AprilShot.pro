@@ -17,14 +17,22 @@ SOURCES += main.cpp\
     utils.cpp \
     rectselector.cpp \
     modebox.cpp \
-    titlebar.cpp
+    titlebar.cpp \
+    qiniu.cpp
 
 HEADERS  += \
     mainwidget.h \
     utils.h \
     rectselector.h \
     modebox.h \
-    titlebar.h
+    titlebar.h \
+    qiniu.h \
+    rs.h \
+    utils.h \
+    titlebar.h \
+    modebox.h \
+    rectselector.h
+
 
 FORMS    += \
     mainwidget.ui \
@@ -34,7 +42,8 @@ RC_FILE = icon.rc
 
 OTHER_FILES += \
     icon.rc \
-    AprilShot.ico
+    AprilShot.ico \
 
 RESOURCES += \
-    icon.qrc
+    icon.qrc \
+    systray.qrc

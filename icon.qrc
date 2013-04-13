@@ -10,4 +10,10 @@
         <file>images/Aprilshot_santa.png</file>
         <file>images/Aprilshot.png</file>
     </qresource>
+    <qresource prefix="/tb">
+        <file>images/min.png</file>
+        <file>images/close.png</file>
+        <file>images/normal.png</file>
+        <file>images/max.png</file>
+    </qresource>
 </RCC>
